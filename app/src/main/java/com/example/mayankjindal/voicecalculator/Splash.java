@@ -38,7 +38,7 @@ public class Splash extends Activity
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.splash1);
+        setContentView(R.layout.splash);
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
