@@ -9,12 +9,19 @@ import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.*;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 1234;
     Button start;
     Dialog matchTextDialog;
-    ListView textList;
+    private ListView textList;
     ArrayList<String> matchesText;
 
     @Override
@@ -62,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public boolean isConnected() throws NullPointerException{
+    public boolean isConnected() throws NullPointerException {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo net = cm.getActiveNetworkInfo();
         return net != null && net.isAvailable() && net.isConnected();
@@ -178,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Logic to calculate the solution.
      */
-    private void onEqual() throws ArithmeticException{
+    private void onEqual() throws ArithmeticException {
         // If the current state is error, nothing to do.
         // If the last input is a number only, solution can be found.
         if (lastNumeric && !stateError) {
