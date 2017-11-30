@@ -7,14 +7,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -28,25 +25,20 @@ import net.objecthunter.exp4j.ExpressionBuilder;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    // IDs of all the numeric buttons
     private int[] numericButtons = {R.id.btnZero, R.id.btnOne, R.id.btnTwo, R.id.btnThree, R.id.btnFour, R.id.btnFive, R.id.btnSix, R.id.btnSeven, R.id.btnEight, R.id.btnNine};
-    // IDs of all the operator buttons
     private int[] operatorButtons = {R.id.btnAdd, R.id.btnSubtract, R.id.btnMultiply, R.id.btnDivide};
-    // TextView used to display the output
-    private TextView txtScreen;
-    // Represent whether the lastly pressed key is numeric or not
-    private boolean lastNumeric;
+    private TextView txtScreen; //Display Output
+    private boolean lastNumeric; //Lastly Pressed Key is Numeric or not
     // Represent that current state is in error or not
     private boolean stateError;
     // If true, do not allow to add another DOT
     private boolean lastDot;
 
     private static final int REQUEST_CODE = 1234;
-    Button Start;
-    TextView Speech;
-    Dialog match_text_dialog;
-    ListView textlist;
-    ArrayList<String> matches_text;
+    Button start;
+    Dialog matchTextDialog;
+    private ListView textList;
+    ArrayList<String> matchesText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,67 +53,59 @@ public class MainActivity extends AppCompatActivity {
         // Find and set OnClickListener to operator buttons, equal button and decimal point button
         setOperatorOnClickListener();
 
-        Start = (Button)findViewById(R.id.start_reg);
-        //Speech = (TextView)findViewById(R.id.speech);
-
-        Start.setOnClickListener(new View.OnClickListener() {
+        start = (Button) findViewById(R.id.start_reg);
+        start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isConnected()){
+                if (isConnected()) {
                     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                             RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
                     startActivityForResult(intent, REQUEST_CODE);
-                }
-                else{
+                } else {
                     Toast.makeText(getApplicationContext(), "Please Connect to Internet", Toast.LENGTH_LONG).show();
-                }}
-
+                }
+            }
         });
-
     }
 
-    public  boolean isConnected()
-    {
+    public boolean isConnected() throws NullPointerException {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo net = cm.getActiveNetworkInfo();
-        if (net!=null && net.isAvailable() && net.isConnected()) {
-            return true;
-        } else {
-            return false;
-        }
+        return net != null && net.isAvailable() && net.isConnected();
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
 
-            match_text_dialog = new Dialog(MainActivity.this);
-            match_text_dialog.setContentView(R.layout.dailog_matches_frag);
-            match_text_dialog.setTitle("Select Matching Text");
-            textlist = (ListView)match_text_dialog.findViewById(R.id.list);
-            matches_text = data
+            matchTextDialog = new Dialog(MainActivity.this);
+            matchTextDialog.setContentView(R.layout.dailog_matches_frag);
+            matchTextDialog.setTitle("Select Matching Text");
+            textList = (ListView) matchTextDialog.findViewById(R.id.list);
+            matchesText = data
                     .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            ArrayAdapter<String> adapter =    new ArrayAdapter<String>(this,
-                    android.R.layout.simple_list_item_1, matches_text);
-            textlist.setAdapter(adapter);
-            textlist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                    android.R.layout.simple_list_item_1, matchesText);
+            textList.setAdapter(adapter);
+            textList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {
-                    txtScreen.setText(""+matches_text.get(position));
-                    match_text_dialog.hide();
+                    txtScreen.setText(matchesText.get(position));
+                    matchTextDialog.hide();
                 }
             });
-            match_text_dialog.show();
-
+            matchTextDialog.show();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
     /**
      * Find and set OnClickListener to numeric buttons.
      */
     private void setNumericOnClickListener() {
-        // Create a common OnClickListener
+
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -201,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Logic to calculate the solution.
      */
-    private void onEqual() {
+    private void onEqual() throws ArithmeticException {
         // If the current state is error, nothing to do.
         // If the last input is a number only, solution can be found.
         if (lastNumeric && !stateError) {
@@ -211,12 +195,12 @@ public class MainActivity extends AppCompatActivity {
             Expression expression = new ExpressionBuilder(txt).build();
             try {
                 // Calculate the result and display
-                double result = expression.evaluate();
+                Double result = expression.evaluate();
                 txtScreen.setText(Double.toString(result));
                 lastDot = true; // Result contains a dot
             } catch (ArithmeticException ex) {
                 // Display an error message
-                txtScreen.setText("Error");
+                txtScreen.setText(R.string.ERROR);
                 stateError = true;
                 lastNumeric = false;
             }
@@ -235,13 +219,10 @@ public class MainActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (item.getItemId() == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }
