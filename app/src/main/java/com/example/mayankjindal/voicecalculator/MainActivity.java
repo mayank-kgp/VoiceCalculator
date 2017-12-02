@@ -31,7 +31,10 @@ public class MainActivity extends AppCompatActivity {
     // IDs of all the numeric buttons
     private int[] numericButtons = {R.id.btnZero, R.id.btnOne, R.id.btnTwo, R.id.btnThree, R.id.btnFour, R.id.btnFive, R.id.btnSix, R.id.btnSeven, R.id.btnEight, R.id.btnNine};
     // IDs of all the operator buttons
-    private int[] operatorButtons = {R.id.btnAdd, R.id.btnSubtract, R.id.btnMultiply, R.id.btnDivide};
+    private int[] operatorButtons = {R.id.btnAdd, R.id.btnSubtract, R.id.btnMultiply, R.id.btnDivide, R.id.btnMod, R.id.btnExpo};
+
+    //Button for square root function
+    private Button sqrt;
     // TextView used to display the output
     private TextView txtScreen;
     // Represent whether the lastly pressed key is numeric or not
@@ -56,8 +59,11 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         // Find the TextView
         this.txtScreen = (TextView) findViewById(R.id.txtScreen);
+        //Find the sqrt button
+        sqrt=(Button)findViewById(R.id.btnSqrt);
         // Find and set OnClickListener to numeric buttons
         setNumericOnClickListener();
+
         // Find and set OnClickListener to operator buttons, equal button and decimal point button
         setOperatorOnClickListener();
 
@@ -77,6 +83,21 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Please Connect to Internet", Toast.LENGTH_LONG).show();
                 }}
 
+        });
+
+        sqrt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // If the current state is error, nothing to do.
+                // If the last input is a number only, solution can be found.
+                if (lastNumeric && !stateError) {
+                    // Read the expression
+                    String txt = txtScreen.getText().toString();
+                    double x=Double.parseDouble(txt);
+                    double res=Math.sqrt(x);
+                    txtScreen.setText(Double.toString(res));
+                }
+            }
         });
 
     }
@@ -209,16 +230,16 @@ public class MainActivity extends AppCompatActivity {
             String txt = txtScreen.getText().toString();
             // Create an Expression (A class from exp4j library)
             Expression expression = new ExpressionBuilder(txt).build();
-            try {
-                // Calculate the result and display
-                double result = expression.evaluate();
-                txtScreen.setText(Double.toString(result));
-                lastDot = true; // Result contains a dot
-            } catch (ArithmeticException ex) {
-                // Display an error message
-                txtScreen.setText("Error");
-                stateError = true;
-                lastNumeric = false;
+                try {
+                    // Calculate the result and display
+                    double result = expression.evaluate();
+                    txtScreen.setText(Double.toString(result));
+                    lastDot = true; // Result contains a dot
+                } catch (ArithmeticException ex) {
+                    // Display an error message
+                    txtScreen.setText("Error");
+                    stateError = true;
+                    lastNumeric = false;
             }
         }
     }
