@@ -59,27 +59,27 @@ public class MainActivity extends AppCompatActivity {
         // Find the TextView
         this.txtScreen = (TextView) findViewById(R.id.txtScreen);
         //Find the sqrt button
-        sqrt=(Button)findViewById(R.id.btnSqrt);
+        sqrt = (Button) findViewById(R.id.btnSqrt);
         // Find and set OnClickListener to numeric buttons
         setNumericOnClickListener();
         // Find and set OnClickListener to operator buttons, equal button and decimal point button
         setOperatorOnClickListener();
 
-        Start = (Button)findViewById(R.id.start_reg);
+        Start = (Button) findViewById(R.id.start_reg);
         //Speech = (TextView)findViewById(R.id.speech);
 
         Start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isConnected()){
+                if (isConnected()) {
                     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                             RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
                     startActivityForResult(intent, REQUEST_CODE);
-                }
-                else{
+                } else {
                     Toast.makeText(getApplicationContext(), "Please Connect to Internet", Toast.LENGTH_LONG).show();
-                }}
+                }
+            }
 
         });
 
@@ -91,24 +91,24 @@ public class MainActivity extends AppCompatActivity {
                 if (lastNumeric && !stateError) {
                     // Read the expression
                     String txt = txtScreen.getText().toString();
-                    double x=Double.parseDouble(txt);
-                    double res=Math.sqrt(x);
+                    double x = Double.parseDouble(txt);
+                    double res = Math.sqrt(x);
                     txtScreen.setText(Double.toString(res));
                 }
             }
         });
     }
 
-    public  boolean isConnected()
-    {
+    public boolean isConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo net = cm.getActiveNetworkInfo();
-        if (net!=null && net.isAvailable() && net.isConnected()) {
+        if (net != null && net.isAvailable() && net.isConnected()) {
             return true;
         } else {
             return false;
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
@@ -116,17 +116,17 @@ public class MainActivity extends AppCompatActivity {
             match_text_dialog = new Dialog(MainActivity.this);
             match_text_dialog.setContentView(R.layout.dailog_matches_frag);
             match_text_dialog.setTitle("Select Matching Text");
-            textlist = (ListView)match_text_dialog.findViewById(R.id.list);
+            textlist = (ListView) match_text_dialog.findViewById(R.id.list);
             matches_text = data
                     .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            ArrayAdapter<String> adapter =    new ArrayAdapter<String>(this,
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                     android.R.layout.simple_list_item_1, matches_text);
             textlist.setAdapter(adapter);
             textlist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {
-                    txtScreen.setText(""+matches_text.get(position));
+                    txtScreen.setText("" + matches_text.get(position));
                     match_text_dialog.hide();
                 }
             });
@@ -135,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
     /**
      * Find and set OnClickListener to numeric buttons.
      */
@@ -207,6 +208,19 @@ public class MainActivity extends AppCompatActivity {
                 lastDot = false;
             }
         });
+        // Backspace button
+        findViewById(R.id.btnBackspace).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String str = txtScreen.getText().toString();
+                txtScreen.setText(str.substring(0,str.length()-1));  // Delete the last character
+                // Reset all the states and flags
+//                lastNumeric = false;
+//                stateError = false;
+//                lastDot = false;
+            }
+        });
+
         // Equal button
         findViewById(R.id.btnEqual).setOnClickListener(new View.OnClickListener() {
             @Override
