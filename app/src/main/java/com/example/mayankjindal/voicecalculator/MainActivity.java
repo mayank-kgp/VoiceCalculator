@@ -22,10 +22,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
 import java.util.ArrayList;
+import java.io.*;
+import java.util.*;
+import java.lang.*;
+
 
 public class MainActivity extends AppCompatActivity {
     // IDs of all the numeric buttons
@@ -200,11 +205,26 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnClear).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                txtScreen.setText("");  // Clear the screen
+              
+
+                String scrtext=txtScreen.getText().toString();
+                int l=scrtext.length();
+                scrtext=scrtext.substring(0,l-1);
+                txtScreen.setText(scrtext);
+
                 // Reset all the states and flags
                 lastNumeric = false;
                 stateError = false;
                 lastDot = false;
+            }
+
+        });
+        findViewById(R.id.btnClear).setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                txtScreen.setText("");
+                Toast.makeText(MainActivity.this,"All text cleared", Toast.LENGTH_SHORT).show();// deleting all text on long click
+                return true;
             }
         });
         // Equal button
