@@ -207,6 +207,14 @@ public class MainActivity extends AppCompatActivity {
                 lastDot = false;
             }
         });
+        // Backspace button
+        findViewById(R.id.btnBackspace).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String currentTxt = txtScreen.getText().toString();
+                txtScreen.setText(currentTxt.substring(0,currentTxt.length()- 1));
+            }
+        });
         // Equal button
         findViewById(R.id.btnEqual).setOnClickListener(new View.OnClickListener() {
             @Override
