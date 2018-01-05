@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/VoiceCalculator.iml" filepath="$PROJECT_DIR$/VoiceCalculator.iml" />
+      <module fileurl="file://C:\Users\admin\Documents\GitHub\VoiceCalculator\VoiceCalculator.iml" filepath="C:\Users\admin\Documents\GitHub\VoiceCalculator\VoiceCalculator.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\admin\Documents\GitHub\VoiceCalculator\app\app.iml" filepath="C:\Users\admin\Documents\GitHub\VoiceCalculator\app\app.iml" />
     </modules>
   </component>
 </project>
