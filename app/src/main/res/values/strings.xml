@@ -3,4 +3,23 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_splash">Splash</string>
     <string name="SquareRoot">sqrt</string>
+        <string name="Dot">.</string>
+    <string name="strNine">9</string>
+    <string name="strZero">0</string>
+    <string name="strEquals">=</string>
+    <string name="strDivide">/</string>
+    <string name="strMultiply">*</string>
+    <string name="strSubtract">-</string>
+    <string name="strAdd">+</string>
+    <string name="strClear">C</string>
+    <string name="strSeven">7</string>
+    <string name="strEight">8</string>
+    <string name="strThree">3</string>
+    <string name="strTwo">2</string>
+    <string name="strOne">1</string>
+    <string name="strSix">6</string>
+    <string name="strFive">5</string>
+    <string name="strFour">4</string>
+    <string name="strMod">%</string>
+    <string name="Exponent">e</string>
 </resources>
